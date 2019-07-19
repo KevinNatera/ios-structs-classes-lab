@@ -24,9 +24,28 @@ fred.name = "Brick"
 fred.weight = 999.2
 fred.homePlanet = "Mars"
 ```
+The lines will not run because the property "homePlanet" is a constant.
+
 
 Fix the class definition for `Giant` in the space below so that it **does** work:
 
+```swift
+class Giant {
+var name: String = "Fred"
+var weight: Double = 340.0
+var homePlanet: String = "Earth"
+}
+
+let fred = Giant()
+
+fred.name = "Brick"
+fred.weight = 999.2
+fred.homePlanet = "Mars"
+
+print(fred.name)
+print(fred.weight)
+print(fred.homePlanet)
+```
 
 ## Question 2
 
@@ -48,9 +67,25 @@ bilbo.name = "Jake"
 bilbo.height = 1.42
 bilbo.homePlanet = "Saturn"
 ```
+The lines will not run because 'bilbo' was declared as a constant.
 
 Change the declaration of `bilbo` so that the above three lines of code **do** work:
 
+```swift
+struct Alien {
+var name: String
+var height: Double
+var homePlanet: String
+}
+
+var bilbo = Alien(name: "Bilbo", height: 1.67, homePlanet: "Venus")
+
+bilbo.name = "Jake"
+bilbo.height = 1.42
+bilbo.homePlanet = "Saturn"
+
+print(bilbo)
+```
 
 ## Question 3
 
@@ -65,6 +100,7 @@ jason.name = "Jason"
 
 What will the value of `edgar.name` be after those three lines of code are run? What will the value of `jason.name` be? Why?
 
+The values of both 'edgar.name' and 'jason.name' will be "Jason", because 'jason' and 'edgar' are both reference type  objects derived from the class 'Giant'.  'jason' is assigned the value of 'edgar', so when you change a property of 'jason' it also affects 'edgar' the same way since they are both using the same spot in the program's memory.
 
 ## Question 4
 
@@ -77,6 +113,8 @@ charlesFromJupiter.homePlanet = "Jupiter"
 ```
 
 What will the value of `charles.homePlanet` be after the above code run? What about the value of `charlesFromJupiter.homePlanet`? Why?
+
+The value of 'charles.homePlanet' is "Pluto" and the value of 'charlesFromJupiter.homePlanet' is "Jupiter", because they are value type objects derived from the struct 'Alien'. Becaus they are value type objects, they have their own separate space in memory, and this changing the value of 'charlesFromJupiter.homePlanet'  does not affect the value of 
 
 
 ## Question 5
@@ -100,7 +138,26 @@ struct BankAccount {
 
 Does this code work? Why or why not?
 
+This code does not work because the mutating keyword has to precede a function that alters a property of a struct if said function is contained within the struct.
+
 Fix the `BankAccount` struct so it does work.
+
+```swift
+
+struct BankAccount {
+var owner: String
+var balance: Double
+
+mutating func deposit(_ amount: Double) {
+balance += amount
+}
+
+mutating func withdraw(_ amount: Double) {
+balance -= amount
+}
+}
+```
+
 
 Given the code below (which should incorporate any fixes you made):
 
@@ -112,6 +169,7 @@ joeAccount.withdraw(50.0)
 
 What will the value of `joeAccount.balance` be after the above code runs? What about the value of `joeOtherAccount.balance`? Why?
 
+'joeAccount.balance' will have a value of '50.0' and 'joeOtherAccount.balance' will have a value of '100.0', because they are value type objects and don't affect each other despite 'joeOtherAccount' being assigned the value of 'joeAccount'.
 
 ## Question 6
 
@@ -120,6 +178,30 @@ a. Write a struct called `Person` that has 3 properties of type `String`: a firs
 
 b. Write a method in `Person` called `fullName` that will return a formatted string of an instance's full name. Call this method on both the instances you created in part a.
 
+```swift
+
+struct Person {
+var firstName: String
+var middleName: String?
+var lastName: String
+
+func fullName() -> String {
+if middleName != nil {
+return ("\(firstName) \(middleName!) \(lastName)")
+} else {
+return ("\(firstName) \(lastName)")
+}
+}
+}
+
+let person1 = Person(firstName: "John", middleName: nil, lastName: "Wick")
+let person2 = Person(firstName: "Geralt", middleName: "of", lastName: "Rivia")
+
+print(person2.firstName)
+
+print(person1.fullName())
+print(person2.fullName())
+```
 
 ## Question 7
 
@@ -127,6 +209,29 @@ a. Create a struct called `Book` that has properties `title`, `author` and `rati
 
 
 b. Add a method to `Book` called `isGood` that returns `true` if its rating is greater than or equal to 7
+
+```swift
+
+struct Book {
+var title: String
+var author: String
+var rating: Double
+
+func isGood() -> Bool {
+if rating >= 7.0 {
+return true
+} else {
+return false
+
+}
+}
+}
+
+var book1 = Book(title: "Bible", author: "Not God", rating: 6.9)
+var book2 = Book(title: "Telling Lies", author: "Paul Ekman", rating: 8.0)
+
+print(book2.isGood())
+```
 
 
 ## Question 8
@@ -191,6 +296,47 @@ print(dog4.toString())
 //Mood: feeling pawesome
 ```
 
+```swift
+//a-d
+
+class Dog {
+var name = "Spike"
+var breed = "Pitbull"
+var mood = "aggressive"
+var hungry = true
+
+func playFetch() {
+hungry = true
+mood = "playful"
+print("Ruff!")
+}
+func feed() {
+if hungry == true {
+hungry = false
+print("Woof!")
+} else {
+print("The dog doesn't look hungry.")
+}
+}
+func toString() ->  String {
+return "Name: \(name) | Breed: \(breed) | Mood: \(mood) | Hungry: \(hungry)" 
+}
+
+}
+
+
+var dog1 = Dog()
+
+dog1.playFetch()
+print(dog1.hungry)
+print(dog1.mood)
+
+dog1.feed()
+
+print(dog1.toString())
+```
+
+
 e. Add a type property called `count` that keeps track of how many dogs have been created so far.
 
 //Ex: There have been four dogs created so far
@@ -220,6 +366,42 @@ tenDegreesCelsius.getFahrenheitTemp() //returns 50.0
 c. Give the `Celsius` struct a method called `isBelowFreezing` that returns a `Bool` (true if the temperature is below freezing).
 
 
+```swift
+
+struct FreezingPoint {
+let fahrenheit = 32.0
+let celsius = 0.0
+let kelvin = 273.2
+}
+
+struct Celsius {
+var celsius = 10.0
+
+
+func getFahrenheitTemp() -> Double {
+let fahrenheit = ((celsius * 1.8) + 32)
+return fahrenheit
+}
+func getKelvinTemp() -> Double {
+let kelvin = (celsius + 273)
+return kelvin
+}
+func isBelowFreezing() -> Bool {
+if celsius <= 0 {
+return true
+} else {
+return false
+}
+}
+}
+
+var tenDegreesCelsius = Celsius(celsius: 10.0)
+
+print(tenDegreesCelsius.celsius)
+print(tenDegreesCelsius.getKelvinTemp())
+print(tenDegreesCelsius.getFahrenheitTemp())
+```
+
 ## Question 10
 
 Create a struct called `RGBColor` that has 3 properties, `red`, `green`, `blue` that are all of type `Double`.
@@ -243,6 +425,30 @@ a. Create a struct called `Movie` that has properties for `name` (`String`), `ye
 b. Create an instance method inside `Movie` called `blurb` that returns a formatted string describing the movie.
 
 Ex: "Borat came out in 2006. It was an odd film starring Sacha Baron Cohen as a man named Borat who was visiting America from Kazakhstan."
+
+```swift
+
+struct Movie {
+var name: String
+var year: Int
+var genre: String
+var cast: [String]
+var description: String
+
+func blurb() -> String {
+var actors = ""
+for i in cast {
+if cast.count > 1 && i == cast.last {
+actors += "and \(i)"
+} else {
+actors += "\(i),"
+}
+}
+return "\(name) was released in \(year). \(actors) starred in this film about \(description)."
+}
+}
+```
+
 
 
 ## Question 12
